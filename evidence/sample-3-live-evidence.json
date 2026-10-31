@@ -1,0 +1,16 @@
+{
+  "execution": {
+    "id": "6d04ae0495f347e39fb68219348338d0",
+    "status": "success",
+    "startedAt": "2026-10-20T01:53:24.907Z",
+    "duration": 18397,
+    "operations": 10,
+    "credits": 23.73,
+    "dataTransfer": 67000
+  },
+  "outputs": {
+    "draft_json": "{\"url\":\"https://www.placidway.com/article/2255/How-to-Prepare-for-Vasectomy-Reversal-in-Mexico\",\"title\":\"Vasectomy Reversal in Mexico: Cost, Safety & Success Rates\",\"summary\":\"An article discusses factors related to vasectomy reversal procedures in Mexico, including patient eligibility, types of procedures, and considerations for selecting a clinic and surgeon.\",\"image_url\":\"https://www.placidway.com/cdn-cgi/image/quality=85,fit=pad,width=1200,height=630/https://placidwaycdn.s3.amazonaws.com/images/article_thumb/1791203094Vasectomy-reversal-surgery-in-Mexico-(2).jpg\",\"caption\":\"Considering vasectomy reversal? An article outlines key topics for those exploring options in Mexico.\\nThe article highlights the importance of verifying surgeon certifications.\\nIt also discusses verifying a medical facility's COFEPRIS license.\\nRead the article.\\n#PatientQuestions #MedicalTravel #PlacidWay\\nhttps://www.placidway.com/article/2255/How-to-Prepare-for-Vasectomy-Reversal-in-Mexico\",\"caption_without_link\":\"Considering vasectomy reversal? An article outlines key topics for those exploring options in Mexico.\\nThe article highlights the importance of verifying surgeon certifications.\\nIt also discusses verifying a medical facility's COFEPRIS license.\\nRead the article.\\n#PatientQuestions #MedicalTravel #PlacidWay\",\"caption_hash\":\"8784d177a603d8d4e4f9a5532c4b7e0282513cc06080641544f8ad3da88e4334\",\"approval_required\":false,\"status\":\"ready_to_simulate\",\"guardrail_ok\":true,\"character_count\":305,\"evidence1\":\"Always verify that your surgeon holds active certification from the Consejo Nacional Mexicano de Urología (CONAMEXURO) before booking your procedure.\",\"evidence2\":\"The facility must be licensed by COFEPRIS (Federal Commission for the Protection against Sanitary Risk), which is Mexico's equivalent to the FDA.\",\"created_at\":\"2026-10-20T01:53:43+00:00\",\"source_mode\":\"snapshot_supplied\"}",
+    "status": "ready_to_simulate",
+    "caption": "Considering vasectomy reversal? An article outlines key topics for those exploring options in Mexico.\nThe article highlights the importance of verifying surgeon certifications.\nIt also discusses verifying a medical facility's COFEPRIS license.\nRead the article.\n#PatientQuestions #MedicalTravel #PlacidWay\nhttps://www.placidway.com/article/2255/How-to-Prepare-for-Vasectomy-Reversal-in-Mexico"
+  }
+}

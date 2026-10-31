@@ -1,0 +1,1417 @@
+{
+  "name": "PlacidWay | Review & Publish",
+  "flow": [
+    {
+      "id": 1,
+      "module": "scenario-service:StartSubscenario",
+      "version": 2,
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 1050
+        }
+      }
+    },
+    {
+      "id": 32,
+      "module": "datastore:AddRecord",
+      "version": 1,
+      "parameters": {
+        "datastore": 178193
+      },
+      "mapper": {
+        "key": "run:{{executionId}}:publisher-start",
+        "data": {
+          "status": "started",
+          "created_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+          "execution_id": "{{executionId}}",
+          "review_status": "stored_record_lookup_required"
+        },
+        "overwrite": false
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 1050,
+          "name": "Persist every publisher request"
+        }
+      }
+    },
+    {
+      "id": 31,
+      "module": "datastore:GetRecord",
+      "version": 1,
+      "parameters": {
+        "datastore": 178193
+      },
+      "mapper": {
+        "key": "{{1.draft_id}}",
+        "returnWrapped": false
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 1050,
+          "name": "Read immutable draft and decision from native review queue"
+        }
+      },
+      "onerror": [
+        {
+          "id": 38,
+          "module": "datastore:AddRecord",
+          "version": 1,
+          "parameters": {
+            "datastore": 178193
+          },
+          "mapper": {
+            "key": "run:{{executionId}}:invalid-draft",
+            "data": {
+              "status": "invalid_draft",
+              "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+              "execution_id": "{{executionId}}",
+              "error_message": "{{31.error.message}}",
+              "publish_status": "blocked"
+            },
+            "overwrite": false
+          },
+          "metadata": {
+            "designer": {
+              "x": 900,
+              "y": 2100,
+              "name": "Persist invalid or missing stored draft"
+            }
+          }
+        },
+        {
+          "id": 43,
+          "module": "builtin:Commit",
+          "version": 1,
+          "metadata": {
+            "designer": {
+              "x": 1200,
+              "y": 2100,
+              "name": "Stop invalid draft without publishing"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "module": "json:ParseJSON",
+      "version": 1,
+      "mapper": {
+        "json": "{{31.payload}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 900,
+          "name": "Read reviewed draft"
+        }
+      },
+      "onerror": [
+        {
+          "id": 39,
+          "module": "datastore:AddRecord",
+          "version": 1,
+          "parameters": {
+            "datastore": 178193
+          },
+          "mapper": {
+            "key": "run:{{executionId}}:invalid-draft",
+            "data": {
+              "status": "invalid_draft",
+              "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+              "execution_id": "{{executionId}}",
+              "error_message": "{{4.error.message}}",
+              "publish_status": "blocked"
+            },
+            "overwrite": false
+          },
+          "metadata": {
+            "designer": {
+              "x": 1200,
+              "y": 1800,
+              "name": "Persist invalid or missing stored draft"
+            }
+          }
+        },
+        {
+          "id": 44,
+          "module": "builtin:Commit",
+          "version": 1,
+          "metadata": {
+            "designer": {
+              "x": 1500,
+              "y": 1800,
+              "name": "Stop invalid draft without publishing"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "module": "datastore:ExistRecord",
+      "version": 1,
+      "parameters": {
+        "datastore": 178193
+      },
+      "mapper": {
+        "key": "{{sha256(4.url)}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 1200,
+          "y": 750,
+          "name": "Block URLs already published"
+        }
+      }
+    },
+    {
+      "id": 29,
+      "module": "datastore:ExistRecord",
+      "version": 1,
+      "parameters": {
+        "datastore": 178193
+      },
+      "mapper": {
+        "key": "publish-day:{{formatDate(now; \"YYYY-MM-DD\"; \"Asia/Jakarta\")}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 1500,
+          "y": 750,
+          "name": "Block a second published post on the same Jakarta date"
+        }
+      }
+    },
+    {
+      "id": 33,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "mapper": null,
+      "metadata": {
+        "designer": {
+          "x": 1800,
+          "y": 750,
+          "name": "Explicit validation pass or blocked audit"
+        }
+      },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 5,
+              "module": "util:SetVariables",
+              "version": 1,
+              "filter": {
+                "name": "Stored immutable approved or auto-ready draft; URL/day safety",
+                "conditions": [
+                  [
+                    {
+                      "a": "{{4.guardrail_ok}}",
+                      "b": true,
+                      "o": "boolean:equal"
+                    },
+                    {
+                      "a": "{{4.url}}",
+                      "b": "^(https://www\\.placidway\\.com/article/[0-9]+/[A-Za-z0-9-]+|https://rss\\.com/podcasts/placidway-connect-pod1/[0-9]+/?)$",
+                      "o": "text:pattern"
+                    },
+                    {
+                      "a": "{{sha256(4.caption_without_link)}}",
+                      "b": "{{4.caption_hash}}",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{4.caption}}",
+                      "b": "{{4.caption_without_link}}\n{{4.url}}",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{if(1.dry_run; true; 1.publish_enabled)}}",
+                      "b": true,
+                      "o": "boolean:equal"
+                    },
+                    {
+                      "a": "{{10.exist}}",
+                      "b": false,
+                      "o": "boolean:equal"
+                    },
+                    {
+                      "a": "{{length(4.caption_without_link)}}",
+                      "b": 500,
+                      "o": "number:less"
+                    },
+                    {
+                      "a": "{{4.status}}",
+                      "b": "^(pending_review|ready_to_simulate|ready_to_publish)$",
+                      "o": "text:pattern"
+                    },
+                    {
+                      "a": "{{if(1.dry_run; true; 29.exist = false)}}",
+                      "b": true,
+                      "o": "boolean:equal"
+                    },
+                    {
+                      "a": "{{31.status}}",
+                      "b": "^(approved|auto_ready)$",
+                      "o": "text:pattern"
+                    },
+                    {
+                      "a": "{{1.draft_id}}",
+                      "b": "draft:{{sha256(31.payload)}}",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{if(4.approval_required; \"approved\"; \"auto_ready\")}}",
+                      "b": "{{31.status}}",
+                      "o": "text:equal"
+                    }
+                  ]
+                ]
+              },
+              "mapper": {
+                "variables": [
+                  {
+                    "name": "status",
+                    "value": "publishing"
+                  },
+                  {
+                    "name": "url",
+                    "value": "{{4.url}}"
+                  },
+                  {
+                    "name": "message",
+                    "value": "{{4.caption}}"
+                  },
+                  {
+                    "name": "image_url",
+                    "value": "{{4.image_url}}"
+                  },
+                  {
+                    "name": "seen_urls",
+                    "value": "{{4.url}}"
+                  },
+                  {
+                    "name": "simulation_only",
+                    "value": false
+                  }
+                ]
+              },
+              "metadata": {
+                "designer": {
+                  "x": 2100,
+                  "y": 600,
+                  "name": "Approval checked; return payload only"
+                }
+              }
+            },
+            {
+              "id": 17,
+              "module": "builtin:BasicRouter",
+              "version": 1,
+              "mapper": null,
+              "metadata": {
+                "designer": {
+                  "x": 2400,
+                  "y": 600,
+                  "name": "Dry run vs real publication"
+                }
+              },
+              "routes": [
+                {
+                  "flow": [
+                    {
+                      "id": 11,
+                      "module": "datastore:AddRecord",
+                      "version": 1,
+                      "parameters": {
+                        "datastore": 178193
+                      },
+                      "filter": {
+                        "name": "Actual publication only, no dry run",
+                        "conditions": [
+                          [
+                            {
+                              "a": "{{1.dry_run}}",
+                              "b": false,
+                              "o": "boolean:equal"
+                            },
+                            {
+                              "a": "{{1.publish_enabled}}",
+                              "b": true,
+                              "o": "boolean:equal"
+                            }
+                          ]
+                        ]
+                      },
+                      "mapper": {
+                        "key": "{{sha256(5.url)}}",
+                        "data": {
+                          "title": "{{4.title}}",
+                          "status": "publish_reserved",
+                          "caption": "{{5.message}}",
+                          "payload": "{{31.payload}}",
+                          "source_url": "{{5.url}}",
+                          "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+                          "execution_id": "{{executionId}}",
+                          "review_status": "{{31.status}}",
+                          "publish_status": "reserved_before_facebook"
+                        },
+                        "overwrite": false
+                      },
+                      "metadata": {
+                        "designer": {
+                          "x": 2700,
+                          "y": 450,
+                          "name": "Persist published URL"
+                        }
+                      }
+                    },
+                    {
+                      "id": 30,
+                      "module": "datastore:AddRecord",
+                      "version": 1,
+                      "parameters": {
+                        "datastore": 178193
+                      },
+                      "mapper": {
+                        "key": "publish-day:{{formatDate(now; \"YYYY-MM-DD\"; \"Asia/Jakarta\")}}",
+                        "overwrite": false
+                      },
+                      "metadata": {
+                        "designer": {
+                          "x": 3000,
+                          "y": 450,
+                          "name": "Reserve publish-day once before Facebook"
+                        }
+                      }
+                    },
+                    {
+                      "id": 12,
+                      "module": "builtin:BasicRouter",
+                      "version": 1,
+                      "mapper": null,
+                      "metadata": {
+                        "designer": {
+                          "x": 3300,
+                          "y": 450,
+                          "name": "Choose image or text-only Facebook post"
+                        }
+                      },
+                      "routes": [
+                        {
+                          "flow": [
+                            {
+                              "id": 8,
+                              "module": "facebook-pages:CreatePostWithPhotos",
+                              "version": 6,
+                              "parameters": {
+                                "__IMTCONN__": 11821190
+                              },
+                              "filter": {
+                                "name": "Source image is available",
+                                "conditions": [
+                                  [
+                                    {
+                                      "a": "{{length(5.image_url)}}",
+                                      "b": 0,
+                                      "o": "number:greater"
+                                    }
+                                  ]
+                                ]
+                              },
+                              "mapper": {
+                                "photos": [
+                                  {
+                                    "url": "{{5.image_url}}",
+                                    "type": "url"
+                                  }
+                                ],
+                                "message": "{{5.message}}",
+                                "page_id": "1312648348607578"
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 3600,
+                                  "y": 150,
+                                  "name": "Publish approved post with source image"
+                                }
+                              },
+                              "onerror": [
+                                {
+                                  "id": 36,
+                                  "module": "datastore:UpdateRecord",
+                                  "version": 1,
+                                  "parameters": {
+                                    "datastore": 178193
+                                  },
+                                  "mapper": {
+                                    "key": "{{sha256(5.url)}}",
+                                    "data": {
+                                      "status": "publish_unknown",
+                                      "caption": "{{5.message}}",
+                                      "source_url": "{{5.url}}",
+                                      "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+                                      "execution_id": "{{executionId}}",
+                                      "error_message": "{{8.error.message}}",
+                                      "review_status": "{{31.status}}",
+                                      "publish_status": "publish_unknown"
+                                    },
+                                    "upsert": false,
+                                    "overwriteArrays": false
+                                  },
+                                  "metadata": {
+                                    "designer": {
+                                      "x": 3900,
+                                      "y": 300,
+                                      "name": "Persist uncertain Facebook result; retain reservations"
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": 46,
+                                  "module": "datastore:UpdateRecord",
+                                  "version": 1,
+                                  "parameters": {
+                                    "datastore": 178193
+                                  },
+                                  "mapper": {
+                                    "key": "{{1.draft_id}}",
+                                    "data": {
+                                      "title": "{{31.title}}",
+                                      "status": "publish_unknown",
+                                      "caption": "{{31.caption}}",
+                                      "payload": "{{31.payload}}",
+                                      "created_at": "{{31.created_at}}",
+                                      "source_url": "{{31.source_url}}",
+                                      "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+                                      "source_mode": "{{31.source_mode}}",
+                                      "caption_hash": "{{31.caption_hash}}",
+                                      "execution_id": "{{31.execution_id}}",
+                                      "error_message": "{{31.error_message}}",
+                                      "review_status": "{{31.review_status}}",
+                                      "publish_status": "publish_unknown",
+                                      "facebook_post_id": "{{31.facebook_post_id}}"
+                                    },
+                                    "upsert": false,
+                                    "overwriteArrays": false
+                                  },
+                                  "metadata": {
+                                    "designer": {
+                                      "x": 4200,
+                                      "y": 300,
+                                      "name": "Hold photo draft for manual reconciliation"
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": 25,
+                                  "module": "google-email:sendAnEmail",
+                                  "version": 4,
+                                  "parameters": {
+                                    "__IMTCONN__": 11823690
+                                  },
+                                  "mapper": {
+                                    "to": [
+                                      "reviewer@example.com"
+                                    ],
+                                    "content": "<h2>Facebook publishing error: manual reconciliation required</h2><p>Route: photo post</p><p>Source URL: {{5.url}}</p><p>Approved draft hash: {{4.caption_hash}}</p><p>The URL was reserved in Data Store before the Facebook call. Check Page 1312648348607578 and Make execution history for an existing post before deciding whether to retry. Do not delete the reservation without reconciliation.</p>",
+                                    "subject": "[ACTION REQUIRED] PlacidWay Facebook PHOTO outcome uncertain",
+                                    "bodyType": "rawHtml"
+                                  },
+                                  "metadata": {
+                                    "designer": {
+                                      "x": 4500,
+                                      "y": 300,
+                                      "name": "ALERT uncertain Facebook PHOTO publish; never retry blindly"
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": 27,
+                                  "module": "builtin:Commit",
+                                  "version": 1,
+                                  "metadata": {
+                                    "designer": {
+                                      "x": 4800,
+                                      "y": 300,
+                                      "name": "Stop safely with URL reservation retained"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "id": 21,
+                              "module": "scenario-service:NameExecution",
+                              "version": 2,
+                              "mapper": {
+                                "executionName": "PUBLISHED_PHOTO | {{8.id}} | {{5.url}}"
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 3900,
+                                  "y": 0,
+                                  "name": "Audit successful photo publication ID"
+                                }
+                              }
+                            },
+                            {
+                              "id": 9,
+                              "module": "util:SetVariables",
+                              "version": 1,
+                              "mapper": {
+                                "variables": [
+                                  {
+                                    "name": "status",
+                                    "value": "published"
+                                  },
+                                  {
+                                    "name": "url",
+                                    "value": "{{5.url}}"
+                                  },
+                                  {
+                                    "name": "message",
+                                    "value": "{{5.message}}"
+                                  },
+                                  {
+                                    "name": "image_url",
+                                    "value": "{{5.image_url}}"
+                                  },
+                                  {
+                                    "name": "facebook_post_id",
+                                    "value": "{{8.id}}"
+                                  },
+                                  {
+                                    "name": "seen_urls",
+                                    "value": "{{5.seen_urls}}"
+                                  },
+                                  {
+                                    "name": "simulation_only",
+                                    "value": false
+                                  },
+                                  {
+                                    "name": "published_at",
+                                    "value": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\")}}"
+                                  }
+                                ]
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 4200,
+                                  "y": 0,
+                                  "name": "Record successful Facebook publication"
+                                }
+                              }
+                            },
+                            {
+                              "id": 34,
+                              "module": "datastore:AddRecord",
+                              "version": 1,
+                              "parameters": {
+                                "datastore": 178193
+                              },
+                              "mapper": {
+                                "key": "run:{{executionId}}:published",
+                                "data": {
+                                  "title": "{{4.title}}",
+                                  "status": "published",
+                                  "caption": "{{5.message}}",
+                                  "source_url": "{{5.url}}",
+                                  "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+                                  "source_mode": "{{4.source_mode}}",
+                                  "caption_hash": "{{4.caption_hash}}",
+                                  "execution_id": "{{executionId}}",
+                                  "review_status": "{{31.status}}",
+                                  "publish_status": "published",
+                                  "facebook_post_id": "{{8.id}}"
+                                },
+                                "overwrite": false
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 4500,
+                                  "y": 0,
+                                  "name": "Persist successful Facebook result before email"
+                                }
+                              }
+                            },
+                            {
+                              "id": 41,
+                              "module": "datastore:UpdateRecord",
+                              "version": 1,
+                              "parameters": {
+                                "datastore": 178193
+                              },
+                              "mapper": {
+                                "key": "{{1.draft_id}}",
+                                "data": {
+                                  "title": "{{31.title}}",
+                                  "status": "published",
+                                  "caption": "{{31.caption}}",
+                                  "payload": "{{31.payload}}",
+                                  "created_at": "{{31.created_at}}",
+                                  "source_url": "{{31.source_url}}",
+                                  "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+                                  "source_mode": "{{31.source_mode}}",
+                                  "caption_hash": "{{31.caption_hash}}",
+                                  "execution_id": "{{31.execution_id}}",
+                                  "error_message": "{{31.error_message}}",
+                                  "review_status": "{{31.review_status}}",
+                                  "publish_status": "published",
+                                  "facebook_post_id": "{{8.id}}"
+                                },
+                                "upsert": false,
+                                "overwriteArrays": false
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 4800,
+                                  "y": 0,
+                                  "name": "Mark consumed approved draft as published"
+                                }
+                              }
+                            },
+                            {
+                              "id": 23,
+                              "module": "google-email:sendAnEmail",
+                              "version": 4,
+                              "parameters": {
+                                "__IMTCONN__": 11823690
+                              },
+                              "mapper": {
+                                "to": [
+                                  "reviewer@example.com"
+                                ],
+                                "content": "<h2>Published to Facebook test Page</h2><p><strong>Result:</strong> {{9.status}}</p><p><strong>Page ID:</strong> 1312648348607578</p><p><strong>Post ID:</strong> {{8.id}}</p><p><strong>Source:</strong> {{5.url}}</p><p><strong>Approved:</strong> {{31.status}}</p><p><strong>Caption:</strong></p><pre>{{escapeHTML(5.message)}}</pre><p><strong>Time:</strong> {{9.published_at}}</p><p>URL reservation is stored in Make Data Store 178193. Reconcile Facebook ID before any manual retry.</p>",
+                                "subject": "[PlacidWay Assessment] PUBLISHED PHOTO | {{8.id}}",
+                                "bodyType": "rawHtml"
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 5100,
+                                  "y": 0,
+                                  "name": "Audit log: Facebook photo publication"
+                                }
+                              }
+                            },
+                            {
+                              "id": 6,
+                              "module": "json:TransformToJSON",
+                              "version": 1,
+                              "mapper": {
+                                "object": "{{`9`}}"
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 5400,
+                                  "y": 0
+                                }
+                              }
+                            },
+                            {
+                              "id": 7,
+                              "module": "scenario-service:ReturnData",
+                              "version": 2,
+                              "mapper": {
+                                "status": "{{9.status}}",
+                                "publication_json": "{{6.json}}"
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 5700,
+                                  "y": 0
+                                },
+                                "expect": [
+                                  {
+                                    "name": "publication_json",
+                                    "type": "text"
+                                  },
+                                  {
+                                    "name": "status",
+                                    "type": "text"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "flow": [
+                            {
+                              "id": 13,
+                              "module": "facebook-pages:CreatePost",
+                              "version": 6,
+                              "parameters": {
+                                "__IMTCONN__": 11821190
+                              },
+                              "filter": {
+                                "name": "Source has no image",
+                                "conditions": [
+                                  [
+                                    {
+                                      "a": "{{length(5.image_url)}}",
+                                      "b": 0,
+                                      "o": "number:equal"
+                                    }
+                                  ]
+                                ]
+                              },
+                              "mapper": {
+                                "message": "{{5.message}}",
+                                "page_id": "1312648348607578"
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 3600,
+                                  "y": 750,
+                                  "name": "Publish approved text-only post"
+                                }
+                              },
+                              "onerror": [
+                                {
+                                  "id": 37,
+                                  "module": "datastore:UpdateRecord",
+                                  "version": 1,
+                                  "parameters": {
+                                    "datastore": 178193
+                                  },
+                                  "mapper": {
+                                    "key": "{{sha256(5.url)}}",
+                                    "data": {
+                                      "status": "publish_unknown",
+                                      "caption": "{{5.message}}",
+                                      "source_url": "{{5.url}}",
+                                      "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+                                      "execution_id": "{{executionId}}",
+                                      "error_message": "{{13.error.message}}",
+                                      "review_status": "{{31.status}}",
+                                      "publish_status": "publish_unknown"
+                                    },
+                                    "upsert": false,
+                                    "overwriteArrays": false
+                                  },
+                                  "metadata": {
+                                    "designer": {
+                                      "x": 3900,
+                                      "y": 900,
+                                      "name": "Persist uncertain Facebook result; retain reservations"
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": 47,
+                                  "module": "datastore:UpdateRecord",
+                                  "version": 1,
+                                  "parameters": {
+                                    "datastore": 178193
+                                  },
+                                  "mapper": {
+                                    "key": "{{1.draft_id}}",
+                                    "data": {
+                                      "title": "{{31.title}}",
+                                      "status": "publish_unknown",
+                                      "caption": "{{31.caption}}",
+                                      "payload": "{{31.payload}}",
+                                      "created_at": "{{31.created_at}}",
+                                      "source_url": "{{31.source_url}}",
+                                      "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+                                      "source_mode": "{{31.source_mode}}",
+                                      "caption_hash": "{{31.caption_hash}}",
+                                      "execution_id": "{{31.execution_id}}",
+                                      "error_message": "{{31.error_message}}",
+                                      "review_status": "{{31.review_status}}",
+                                      "publish_status": "publish_unknown",
+                                      "facebook_post_id": "{{31.facebook_post_id}}"
+                                    },
+                                    "upsert": false,
+                                    "overwriteArrays": false
+                                  },
+                                  "metadata": {
+                                    "designer": {
+                                      "x": 4200,
+                                      "y": 900,
+                                      "name": "Hold text draft for manual reconciliation"
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": 26,
+                                  "module": "google-email:sendAnEmail",
+                                  "version": 4,
+                                  "parameters": {
+                                    "__IMTCONN__": 11823690
+                                  },
+                                  "mapper": {
+                                    "to": [
+                                      "reviewer@example.com"
+                                    ],
+                                    "content": "<h2>Facebook publishing error: manual reconciliation required</h2><p>Route: text-only post</p><p>Source URL: {{5.url}}</p><p>Approved draft hash: {{4.caption_hash}}</p><p>The URL was reserved in Data Store before the Facebook call. Check Page 1312648348607578 and Make execution history for an existing post before deciding whether to retry. Do not delete the reservation without reconciliation.</p>",
+                                    "subject": "[ACTION REQUIRED] PlacidWay Facebook TEXT outcome uncertain",
+                                    "bodyType": "rawHtml"
+                                  },
+                                  "metadata": {
+                                    "designer": {
+                                      "x": 4500,
+                                      "y": 900,
+                                      "name": "ALERT uncertain Facebook TEXT publish; never retry blindly"
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": 28,
+                                  "module": "builtin:Commit",
+                                  "version": 1,
+                                  "metadata": {
+                                    "designer": {
+                                      "x": 4800,
+                                      "y": 900,
+                                      "name": "Stop safely with URL reservation retained"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "id": 22,
+                              "module": "scenario-service:NameExecution",
+                              "version": 2,
+                              "mapper": {
+                                "executionName": "PUBLISHED_TEXT | {{13.id}} | {{5.url}}"
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 3900,
+                                  "y": 600,
+                                  "name": "Audit successful text publication ID"
+                                }
+                              }
+                            },
+                            {
+                              "id": 14,
+                              "module": "util:SetVariables",
+                              "version": 1,
+                              "mapper": {
+                                "variables": [
+                                  {
+                                    "name": "status",
+                                    "value": "published"
+                                  },
+                                  {
+                                    "name": "url",
+                                    "value": "{{5.url}}"
+                                  },
+                                  {
+                                    "name": "message",
+                                    "value": "{{5.message}}"
+                                  },
+                                  {
+                                    "name": "image_url",
+                                    "value": ""
+                                  },
+                                  {
+                                    "name": "facebook_post_id",
+                                    "value": "{{13.id}}"
+                                  },
+                                  {
+                                    "name": "seen_urls",
+                                    "value": "{{5.seen_urls}}"
+                                  },
+                                  {
+                                    "name": "simulation_only",
+                                    "value": false
+                                  },
+                                  {
+                                    "name": "published_at",
+                                    "value": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\")}}"
+                                  }
+                                ]
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 4200,
+                                  "y": 600,
+                                  "name": "Record successful text-only Facebook post"
+                                }
+                              }
+                            },
+                            {
+                              "id": 35,
+                              "module": "datastore:AddRecord",
+                              "version": 1,
+                              "parameters": {
+                                "datastore": 178193
+                              },
+                              "mapper": {
+                                "key": "run:{{executionId}}:published",
+                                "data": {
+                                  "title": "{{4.title}}",
+                                  "status": "published",
+                                  "caption": "{{5.message}}",
+                                  "source_url": "{{5.url}}",
+                                  "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+                                  "source_mode": "{{4.source_mode}}",
+                                  "caption_hash": "{{4.caption_hash}}",
+                                  "execution_id": "{{executionId}}",
+                                  "review_status": "{{31.status}}",
+                                  "publish_status": "published",
+                                  "facebook_post_id": "{{13.id}}"
+                                },
+                                "overwrite": false
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 4500,
+                                  "y": 600,
+                                  "name": "Persist successful Facebook result before email"
+                                }
+                              }
+                            },
+                            {
+                              "id": 42,
+                              "module": "datastore:UpdateRecord",
+                              "version": 1,
+                              "parameters": {
+                                "datastore": 178193
+                              },
+                              "mapper": {
+                                "key": "{{1.draft_id}}",
+                                "data": {
+                                  "title": "{{31.title}}",
+                                  "status": "published",
+                                  "caption": "{{31.caption}}",
+                                  "payload": "{{31.payload}}",
+                                  "created_at": "{{31.created_at}}",
+                                  "source_url": "{{31.source_url}}",
+                                  "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+                                  "source_mode": "{{31.source_mode}}",
+                                  "caption_hash": "{{31.caption_hash}}",
+                                  "execution_id": "{{31.execution_id}}",
+                                  "error_message": "{{31.error_message}}",
+                                  "review_status": "{{31.review_status}}",
+                                  "publish_status": "published",
+                                  "facebook_post_id": "{{13.id}}"
+                                },
+                                "upsert": false,
+                                "overwriteArrays": false
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 4800,
+                                  "y": 600,
+                                  "name": "Mark consumed approved draft as published"
+                                }
+                              }
+                            },
+                            {
+                              "id": 24,
+                              "module": "google-email:sendAnEmail",
+                              "version": 4,
+                              "parameters": {
+                                "__IMTCONN__": 11823690
+                              },
+                              "mapper": {
+                                "to": [
+                                  "reviewer@example.com"
+                                ],
+                                "content": "<h2>Published text-only to Facebook test Page</h2><p><strong>Result:</strong> {{14.status}}</p><p><strong>Page ID:</strong> 1312648348607578</p><p><strong>Post ID:</strong> {{13.id}}</p><p><strong>Source:</strong> {{5.url}}</p><p><strong>Approved:</strong> {{31.status}}</p><p><strong>Caption:</strong></p><pre>{{escapeHTML(5.message)}}</pre><p><strong>Time:</strong> {{14.published_at}}</p><p>URL reservation is stored in Make Data Store 178193. Reconcile Facebook ID before any manual retry.</p>",
+                                "subject": "[PlacidWay Assessment] PUBLISHED TEXT | {{13.id}}",
+                                "bodyType": "rawHtml"
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 5100,
+                                  "y": 600,
+                                  "name": "Audit log: Facebook text publication"
+                                }
+                              }
+                            },
+                            {
+                              "id": 15,
+                              "module": "json:TransformToJSON",
+                              "version": 1,
+                              "mapper": {
+                                "object": "{{`14`}}"
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 5400,
+                                  "y": 600,
+                                  "name": "Format text-only publication result"
+                                }
+                              }
+                            },
+                            {
+                              "id": 16,
+                              "module": "scenario-service:ReturnData",
+                              "version": 2,
+                              "mapper": {
+                                "status": "{{14.status}}",
+                                "publication_json": "{{15.json}}"
+                              },
+                              "metadata": {
+                                "designer": {
+                                  "x": 5700,
+                                  "y": 600,
+                                  "name": "Return text-only published post ID"
+                                },
+                                "expect": [
+                                  {
+                                    "name": "publication_json",
+                                    "type": "text"
+                                  },
+                                  {
+                                    "name": "status",
+                                    "type": "text"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "flow": [
+                    {
+                      "id": 18,
+                      "module": "util:SetVariables",
+                      "version": 1,
+                      "filter": {
+                        "name": "Safe dry run requested",
+                        "conditions": [
+                          [
+                            {
+                              "a": "{{1.dry_run}}",
+                              "b": true,
+                              "o": "boolean:equal"
+                            }
+                          ]
+                        ]
+                      },
+                      "mapper": {
+                        "variables": [
+                          {
+                            "name": "status",
+                            "value": "dry_run_validated"
+                          },
+                          {
+                            "name": "url",
+                            "value": "{{4.url}}"
+                          },
+                          {
+                            "name": "message",
+                            "value": "{{4.caption}}"
+                          },
+                          {
+                            "name": "image_url",
+                            "value": "{{4.image_url}}"
+                          },
+                          {
+                            "name": "facebook_page_id",
+                            "value": "1312648348607578"
+                          },
+                          {
+                            "name": "simulation_only",
+                            "value": true
+                          },
+                          {
+                            "name": "caption_hash",
+                            "value": "{{4.caption_hash}}"
+                          }
+                        ]
+                      },
+                      "metadata": {
+                        "designer": {
+                          "x": 2700,
+                          "y": 1200,
+                          "name": "Return verified preview without posting"
+                        }
+                      }
+                    },
+                    {
+                      "id": 48,
+                      "module": "datastore:AddRecord",
+                      "version": 1,
+                      "parameters": {
+                        "datastore": 178193
+                      },
+                      "mapper": {
+                        "key": "run:{{executionId}}:dry-run",
+                        "data": {
+                          "title": "{{4.title}}",
+                          "status": "dry_run_validated",
+                          "caption": "{{4.caption}}",
+                          "source_url": "{{4.url}}",
+                          "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+                          "caption_hash": "{{4.caption_hash}}",
+                          "execution_id": "{{executionId}}",
+                          "review_status": "{{31.status}}",
+                          "publish_status": "not_published"
+                        },
+                        "overwrite": false
+                      },
+                      "metadata": {
+                        "designer": {
+                          "x": 3000,
+                          "y": 1200,
+                          "name": "Persist dry-run outcome without reserving or publishing"
+                        }
+                      }
+                    },
+                    {
+                      "id": 19,
+                      "module": "json:TransformToJSON",
+                      "version": 1,
+                      "mapper": {
+                        "object": "{{`18`}}"
+                      },
+                      "metadata": {
+                        "designer": {
+                          "x": 3300,
+                          "y": 1200,
+                          "name": "Serialize dry-run preview"
+                        }
+                      }
+                    },
+                    {
+                      "id": 20,
+                      "module": "scenario-service:ReturnData",
+                      "version": 2,
+                      "mapper": {
+                        "status": "{{18.status}}",
+                        "publication_json": "{{19.json}}"
+                      },
+                      "metadata": {
+                        "designer": {
+                          "x": 3600,
+                          "y": 1200,
+                          "name": "Return safe simulation payload"
+                        },
+                        "expect": [
+                          {
+                            "name": "publication_json",
+                            "type": "text"
+                          },
+                          {
+                            "name": "status",
+                            "type": "text"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "flow": [
+            {
+              "id": 40,
+              "module": "datastore:AddRecord",
+              "version": 1,
+              "parameters": {
+                "datastore": 178193
+              },
+              "filter": {
+                "name": "Any approval, integrity, URL or daily guard fails",
+                "conditions": [
+                  [
+                    {
+                      "a": "{{4.guardrail_ok}}",
+                      "b": true,
+                      "o": "boolean:notequal"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{4.url}}",
+                      "b": "^(https://www\\.placidway\\.com/article/[0-9]+/[A-Za-z0-9-]+|https://rss\\.com/podcasts/placidway-connect-pod1/[0-9]+/?)$",
+                      "o": "text:notpattern"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{sha256(4.caption_without_link)}}",
+                      "b": "{{4.caption_hash}}",
+                      "o": "text:notequal"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{4.caption}}",
+                      "b": "{{4.caption_without_link}}\n{{4.url}}",
+                      "o": "text:notequal"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{if(1.dry_run; true; 1.publish_enabled)}}",
+                      "b": true,
+                      "o": "boolean:notequal"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{10.exist}}",
+                      "b": false,
+                      "o": "boolean:notequal"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{length(4.caption_without_link)}}",
+                      "b": 500,
+                      "o": "number:greaterorequal"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{4.status}}",
+                      "b": "^(pending_review|ready_to_simulate|ready_to_publish)$",
+                      "o": "text:notpattern"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{if(1.dry_run; true; 29.exist = false)}}",
+                      "b": true,
+                      "o": "boolean:notequal"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{31.status}}",
+                      "b": "^(approved|auto_ready)$",
+                      "o": "text:notpattern"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{1.draft_id}}",
+                      "b": "draft:{{sha256(31.payload)}}",
+                      "o": "text:notequal"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{if(4.approval_required; \"approved\"; \"auto_ready\")}}",
+                      "b": "{{31.status}}",
+                      "o": "text:notequal"
+                    }
+                  ]
+                ]
+              },
+              "mapper": {
+                "key": "run:{{executionId}}:blocked",
+                "data": {
+                  "title": "{{4.title}}",
+                  "status": "blocked",
+                  "caption": "{{4.caption}}",
+                  "source_url": "{{4.url}}",
+                  "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+                  "caption_hash": "{{4.caption_hash}}",
+                  "execution_id": "{{executionId}}",
+                  "error_message": "Approval, immutable payload, publish switch, URL duplicate or daily-limit gate did not pass.",
+                  "review_status": "{{31.status}}",
+                  "publish_status": "blocked"
+                },
+                "overwrite": false
+              },
+              "metadata": {
+                "designer": {
+                  "x": 2100,
+                  "y": 1500,
+                  "name": "Persist explicit blocked decision with reviewed payload"
+                }
+              }
+            },
+            {
+              "id": 45,
+              "module": "scenario-service:ReturnData",
+              "version": 2,
+              "mapper": {
+                "status": "blocked",
+                "publication_json": ""
+              },
+              "metadata": {
+                "designer": {
+                  "x": 2400,
+                  "y": 1500,
+                  "name": "Return explicit blocked outcome"
+                },
+                "expect": [
+                  {
+                    "name": "publication_json",
+                    "type": "text"
+                  },
+                  {
+                    "name": "status",
+                    "type": "text"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 1,
+      "autoCommit": true,
+      "sequential": true,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "us2.make.com",
+    "notes": []
+  },
+  "io": {
+    "input_spec": [
+      {
+        "name": "draft_id",
+        "type": "text",
+        "label": "Stored immutable draft key",
+        "required": true
+      },
+      {
+        "name": "publish_enabled",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "name": "dry_run",
+        "type": "boolean",
+        "default": false
+      }
+    ],
+    "output_spec": [
+      {
+        "name": "publication_json",
+        "type": "text"
+      },
+      {
+        "name": "status",
+        "type": "text"
+      }
+    ]
+  }
+}

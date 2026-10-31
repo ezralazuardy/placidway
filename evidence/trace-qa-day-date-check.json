@@ -1,0 +1,22 @@
+{
+  "records": [
+    {
+      "direction": "input",
+      "cycle": 1,
+      "operation": 1,
+      "error": false,
+      "data": [
+        "{\"key\":\"qa:publisher-20261023:publish-day:2026-10-23\"}"
+      ]
+    },
+    {
+      "direction": "output",
+      "cycle": 1,
+      "operation": 1,
+      "error": false,
+      "data": [
+        "{\"exist\":true}"
+      ]
+    }
+  ]
+}

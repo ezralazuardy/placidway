@@ -1,0 +1,22 @@
+{
+  "records": [
+    {
+      "direction": "input",
+      "cycle": 1,
+      "operation": 1,
+      "error": false,
+      "data": [
+        "{\"key\":\"qa:publisher-20261023:fac4590c5df185e76b6d0c22a7e4d0c6e0aaceb83617944ac8d9334021288315\"}"
+      ]
+    },
+    {
+      "direction": "output",
+      "cycle": 1,
+      "operation": 1,
+      "error": false,
+      "data": [
+        "{\"exist\":false}"
+      ]
+    }
+  ]
+}

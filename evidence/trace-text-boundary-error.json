@@ -1,0 +1,110 @@
+{
+  "execution": {
+    "id": "81e4004d61c0479189c97e69f59f9a9c",
+    "status": "success",
+    "startedAt": "2026-10-22T17:36:30.997Z",
+    "duration": 1151,
+    "operations": 13,
+    "credits": 13
+  },
+  "modules": [
+    {
+      "id": 1,
+      "name": "scenario-service: StartSubscenario",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:36:31.223Z"
+    },
+    {
+      "id": 32,
+      "name": "datastore: AddRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:36:31.238Z"
+    },
+    {
+      "id": 49,
+      "name": "datastore: AddRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:36:31.272Z"
+    },
+    {
+      "id": 31,
+      "name": "datastore: GetRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:36:31.286Z"
+    },
+    {
+      "id": 4,
+      "name": "json: ParseJSON",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:36:31.288Z"
+    },
+    {
+      "id": 10,
+      "name": "datastore: ExistRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:36:31.293Z"
+    },
+    {
+      "id": 29,
+      "name": "datastore: ExistRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:36:31.297Z"
+    },
+    {
+      "id": 5,
+      "name": "util: SetVariables",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:36:31.305Z"
+    },
+    {
+      "id": 11,
+      "name": "datastore: AddRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:36:31.318Z"
+    },
+    {
+      "id": 30,
+      "name": "datastore: AddRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:36:31.337Z"
+    },
+    {
+      "id": 13,
+      "name": "json: ParseJSON",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:36:32.115Z"
+    },
+    {
+      "id": 37,
+      "name": "datastore: UpdateRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:36:31.363Z"
+    },
+    {
+      "id": 47,
+      "name": "datastore: UpdateRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:36:31.385Z"
+    },
+    {
+      "id": 26,
+      "name": "google-email: sendAnEmail",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:36:32.112Z"
+    }
+  ]
+}

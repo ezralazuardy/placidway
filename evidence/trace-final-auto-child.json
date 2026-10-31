@@ -1,0 +1,93 @@
+{
+  "execution": {
+    "id": "507a09fc70864efd8d251cfdf076ea08",
+    "status": "success",
+    "startedAt": "2026-10-22T17:56:42.745Z",
+    "duration": 451,
+    "operations": 9,
+    "credits": 9
+  },
+  "outputs": {
+    "publication_json": "{\"status\":\"dry_run_validated\",\"url\":\"https://rss.com/podcasts/placidway-connect-pod1/3252783\",\"message\":\"In this PlacidWay episode: Loose skin, body contouring, and safety in Mexico.\\nThe episode discusses surgeries that remove loose skin.\\nThe episode discusses choosing a safe surgeon in Mexico.\\nListen to the episode.\\n#PlacidWay #MedicalTravel #Podcast\\nhttps://rss.com/podcasts/placidway-connect-pod1/3252783\",\"image_url\":\"https://media.rss.com/placidway-connect-pod1/ep_cover_20261021_094028_bb4bb3094d763c30c7d103084f462526.png\",\"facebook_page_id\":\"1312648348607578\",\"simulation_only\":true,\"caption_hash\":\"69426fbd8a8c3d75ce4311dc0796d0e8279aba339f962460a5cd909ce700ac34\"}",
+    "status": "dry_run_validated"
+  },
+  "modules": [
+    {
+      "id": 1,
+      "name": "scenario-service: StartSubscenario",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.011Z"
+    },
+    {
+      "id": 32,
+      "name": "datastore: AddRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.025Z"
+    },
+    {
+      "id": 31,
+      "name": "datastore: GetRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.040Z"
+    },
+    {
+      "id": 4,
+      "name": "json: ParseJSON",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.043Z"
+    },
+    {
+      "id": 10,
+      "name": "datastore: ExistRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.048Z"
+    },
+    {
+      "id": 29,
+      "name": "datastore: ExistRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.053Z"
+    },
+    {
+      "id": 5,
+      "name": "util: SetVariables",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.060Z"
+    },
+    {
+      "id": 18,
+      "name": "util: SetVariables",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.066Z"
+    },
+    {
+      "id": 48,
+      "name": "datastore: AddRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.079Z"
+    },
+    {
+      "id": 19,
+      "name": "json: TransformToJSON",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.090Z"
+    },
+    {
+      "id": 20,
+      "name": "scenario-service: ReturnData",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.162Z"
+    }
+  ]
+}

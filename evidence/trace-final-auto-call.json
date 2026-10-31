@@ -1,0 +1,22 @@
+{
+  "records": [
+    {
+      "direction": "input",
+      "cycle": 1,
+      "operation": 1,
+      "error": false,
+      "data": [
+        "{\"data\":{\"dry_run\":true,\"draft_id\":\"draft:4cbe34e0778a05ea185845f224b93ad0946e72d99fcf6420fef27242a50d7af2\",\"publish_enabled\":false}}"
+      ]
+    },
+    {
+      "direction": "output",
+      "cycle": 1,
+      "operation": 1,
+      "error": false,
+      "data": [
+        "{\"publication_json\":\"{\\\"status\\\":\\\"dry_run_validated\\\",\\\"url\\\":\\\"https://rss.com/podcasts/placidway-connect-pod1/3252783\\\",\\\"message\\\":\\\"In this PlacidWay episode: Loose skin, body contouring, and safety in Mexico.\\\\nThe episode discusses surgeries that remove loose skin.\\\\nThe episode discusses choosing a safe surgeon in Mexico.\\\\nListen to the episode.\\\\n#PlacidWay #MedicalTravel #Podcast\\\\nhttps://rss.com/podcasts/placidway-connect-pod1/3252783\\\",\\\"image_url\\\":\\\"https://media.rss.com/placidway-connect-pod1/ep_cover_20261021_094028_bb4bb3094d763c30c7d103084f462526.png\\\",\\\"facebook_page_id\\\":\\\"1312648348607578\\\",\\\"simulation_only\\\":true,\\\"caption_hash\\\":\\\"69426fbd8a8c3d75ce4311dc0796d0e8279aba339f962460a5cd909ce700ac34\\\"}\",\"status\":\"dry_run_validated\"}"
+      ]
+    }
+  ]
+}

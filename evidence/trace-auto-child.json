@@ -1,0 +1,93 @@
+{
+  "execution": {
+    "id": "d31c0b36241e4dc0b69606771238668b",
+    "status": "success",
+    "startedAt": "2026-10-22T17:16:45.966Z",
+    "duration": 430,
+    "operations": 9,
+    "credits": 9
+  },
+  "outputs": {
+    "publication_json": "{\"status\":\"dry_run_validated\",\"url\":\"https://rss.com/podcasts/placidway-connect-pod1/3240331\",\"message\":\"In this PlacidWay episode: Explore decisions before weight loss surgery abroad.\\nThe episode discusses gastric sleeve vs. gastric bypass and revision surgery.\\nThe episode discusses vetting hospitals/surgeons and 'all-inclusive' package details.\\nListen to the episode.\\n#PlacidWay #MedicalTravel #Podcast\\nhttps://rss.com/podcasts/placidway-connect-pod1/3240331\",\"image_url\":\"https://media.rss.com/placidway-connect-pod1/ep_cover_20261016_155427_7c9d77f8a798f8adf18f9e80c25d38be.png\",\"facebook_page_id\":\"1312648348607578\",\"simulation_only\":true,\"caption_hash\":\"51415945ab041e41e88a37ce102797d4a3732a6c60907773cd5f07e7d089155e\"}",
+    "status": "dry_run_validated"
+  },
+  "modules": [
+    {
+      "id": 1,
+      "name": "scenario-service: StartSubscenario",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:16:46.204Z"
+    },
+    {
+      "id": 32,
+      "name": "datastore: AddRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:16:46.217Z"
+    },
+    {
+      "id": 31,
+      "name": "datastore: GetRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:16:46.232Z"
+    },
+    {
+      "id": 4,
+      "name": "json: ParseJSON",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:16:46.236Z"
+    },
+    {
+      "id": 10,
+      "name": "datastore: ExistRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:16:46.242Z"
+    },
+    {
+      "id": 29,
+      "name": "datastore: ExistRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:16:46.246Z"
+    },
+    {
+      "id": 5,
+      "name": "util: SetVariables",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:16:46.249Z"
+    },
+    {
+      "id": 18,
+      "name": "util: SetVariables",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:16:46.252Z"
+    },
+    {
+      "id": 48,
+      "name": "datastore: AddRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:16:46.264Z"
+    },
+    {
+      "id": 19,
+      "name": "json: TransformToJSON",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:16:46.275Z"
+    },
+    {
+      "id": 20,
+      "name": "scenario-service: ReturnData",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:16:46.367Z"
+    }
+  ]
+}

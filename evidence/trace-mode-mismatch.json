@@ -1,0 +1,72 @@
+{
+  "execution": {
+    "id": "8b7a0874e2fe4d2abbaadc41a82628e7",
+    "status": "success",
+    "startedAt": "2026-10-22T17:24:35.039Z",
+    "duration": 446,
+    "operations": 6,
+    "credits": 6
+  },
+  "outputs": {
+    "publication_json": "",
+    "status": "blocked"
+  },
+  "modules": [
+    {
+      "id": 1,
+      "name": "scenario-service: StartSubscenario",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:24:35.299Z"
+    },
+    {
+      "id": 32,
+      "name": "datastore: AddRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:24:35.314Z"
+    },
+    {
+      "id": 31,
+      "name": "datastore: GetRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:24:35.328Z"
+    },
+    {
+      "id": 4,
+      "name": "json: ParseJSON",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:24:35.330Z"
+    },
+    {
+      "id": 10,
+      "name": "datastore: ExistRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:24:35.334Z"
+    },
+    {
+      "id": 29,
+      "name": "datastore: ExistRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:24:35.338Z"
+    },
+    {
+      "id": 40,
+      "name": "datastore: AddRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:24:35.351Z"
+    },
+    {
+      "id": 45,
+      "name": "scenario-service: ReturnData",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:24:35.457Z"
+    }
+  ]
+}

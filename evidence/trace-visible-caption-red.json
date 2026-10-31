@@ -1,0 +1,8 @@
+{
+  "executionId": "159b8f2deb2443bbb25d656b68e61e19",
+  "status": "success",
+  "outputs": {
+    "publication_json": "{\"status\":\"dry_run_validated\",\"url\":\"https://rss.com/podcasts/placidway-connect-pod1/3227572\",\"message\":\"In this PlacidWay episode: discover why some families explore international fertility options for family balancing and what a typical journey might involve.\\nThe episode discusses why families might look abroad for sex selection options.\\nThe episode discusses what to ask about cost, accreditation, and local rules for fertility services abroad.\\nListen to the episode.\\n#PlacidWay #MedicalTravel #Podcast\\nhttps://rss.com/podcasts/placidway-connect-pod1/3227572\",\"image_url\":\"https://media.rss.com/placidway-connect-pod1/ep_cover_20261012_123554_788659d0d301a81dc518002166f91038.png\",\"facebook_page_id\":\"1312648348607578\",\"simulation_only\":true,\"caption_hash\":\"5d9312fea865fab795ed136ae101142853dda4ddf0f6dcb861791bf5e17be57a\"}",
+    "status": "dry_run_validated"
+  }
+}

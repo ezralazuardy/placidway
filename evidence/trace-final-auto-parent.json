@@ -1,0 +1,166 @@
+{
+  "execution": {
+    "id": "a71e63b020934024b5f5a27426ce729a",
+    "status": "success",
+    "startedAt": "2026-10-22T17:55:43.773Z",
+    "duration": 59686,
+    "operations": 37,
+    "credits": 74.5
+  },
+  "modules": [
+    {
+      "id": 1,
+      "name": "util: BasicTrigger",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:55:44.052Z"
+    },
+    {
+      "id": 23,
+      "name": "datastore: AddRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:55:44.067Z"
+    },
+    {
+      "id": 25,
+      "name": "datastore: SearchRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:55:44.085Z"
+    },
+    {
+      "id": 15,
+      "name": "datastore: ExistRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:55:44.091Z"
+    },
+    {
+      "id": 2,
+      "name": "rss: ActionReadArticles",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:55:44.486Z"
+    },
+    {
+      "id": 3,
+      "name": "datastore: ExistRecord",
+      "invocations": 5,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.385Z"
+    },
+    {
+      "id": 4,
+      "name": "datastore: ExistRecord",
+      "invocations": 5,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.388Z"
+    },
+    {
+      "id": 5,
+      "name": "regexp: HTMLToText",
+      "invocations": 5,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.395Z"
+    },
+    {
+      "id": 18,
+      "name": "datastore: ExistRecord",
+      "invocations": 5,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.399Z"
+    },
+    {
+      "id": 6,
+      "name": "gemini-ai: simpleTextPrompt",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:36.854Z"
+    },
+    {
+      "id": 7,
+      "name": "json: ParseJSON",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:36.858Z"
+    },
+    {
+      "id": 8,
+      "name": "util: SetVariables",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:36.861Z"
+    },
+    {
+      "id": 9,
+      "name": "gemini-ai: simpleTextPrompt",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:42.538Z"
+    },
+    {
+      "id": 10,
+      "name": "util: SetVariables",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:42.545Z"
+    },
+    {
+      "id": 11,
+      "name": "json: TransformToJSON",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:42.551Z"
+    },
+    {
+      "id": 12,
+      "name": "datastore: AddRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:42.568Z"
+    },
+    {
+      "id": 22,
+      "name": "datastore: AddRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:42.591Z"
+    },
+    {
+      "id": 16,
+      "name": "datastore: AddRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:42.612Z"
+    },
+    {
+      "id": 20,
+      "name": "scenario-service: CallSubscenario",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.330Z"
+    },
+    {
+      "id": 49,
+      "name": "datastore: ExistRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.403Z"
+    },
+    {
+      "id": 50,
+      "name": "datastore: ExistRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.407Z"
+    },
+    {
+      "id": 26,
+      "name": "datastore: AddRecord",
+      "invocations": 1,
+      "errors": 0,
+      "lastFinishedAt": "2026-10-22T17:56:43.420Z"
+    }
+  ]
+}

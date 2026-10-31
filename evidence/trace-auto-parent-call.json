@@ -1,0 +1,22 @@
+{
+  "records": [
+    {
+      "direction": "input",
+      "cycle": 1,
+      "operation": 1,
+      "error": false,
+      "data": [
+        "{\"data\":{\"dry_run\":true,\"draft_id\":\"draft:7e5fcb54f4c0b49b59562cb8d9df41b24acceaaadf64f6fbcd6f2e6022eb6637\",\"publish_enabled\":false}}"
+      ]
+    },
+    {
+      "direction": "output",
+      "cycle": 1,
+      "operation": 1,
+      "error": false,
+      "data": [
+        "{\"publication_json\":\"{\\\"status\\\":\\\"dry_run_validated\\\",\\\"url\\\":\\\"https://rss.com/podcasts/placidway-connect-pod1/3240331\\\",\\\"message\\\":\\\"In this PlacidWay episode: Explore decisions before weight loss surgery abroad.\\\\nThe episode discusses gastric sleeve vs. gastric bypass and revision surgery.\\\\nThe episode discusses vetting hospitals/surgeons and 'all-inclusive' package details.\\\\nListen to the episode.\\\\n#PlacidWay #MedicalTravel #Podcast\\\\nhttps://rss.com/podcasts/placidway-connect-pod1/3240331\\\",\\\"image_url\\\":\\\"https://media.rss.com/placidway-connect-pod1/ep_cover_20261016_155427_7c9d77f8a798f8adf18f9e80c25d38be.png\\\",\\\"facebook_page_id\\\":\\\"1312648348607578\\\",\\\"simulation_only\\\":true,\\\"caption_hash\\\":\\\"51415945ab041e41e88a37ce102797d4a3732a6c60907773cd5f07e7d089155e\\\"}\",\"status\":\"dry_run_validated\"}"
+      ]
+    }
+  ]
+}
