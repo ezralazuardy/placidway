@@ -2,7 +2,7 @@
 
 Status: **incomplete acceptance**, not ready to claim all eight requirements passed. Historical evidence is identified separately from the current graph. A configured module or a top-level success does not prove its downstream branch ran.
 
-**Current blockers:** Organization isPaused=true on Free, 107,804 centicredits consumed (1,078.04 credits), 1,000-credit allowance, unusedCenticredits=-7,804, autoPurchasingActivated=false. Reset: 20 November 2026 01:13:58 UTC. Main scenarios are configured active but platform-paused. Browser inventory is empty, preventing fresh native exports and publisher import verification. Additional public post and repository authorization are pending. Free execution-history retention is seven days; important evidence is saved locally.
+**Status updated 31 October 2026:** Organization isPaused=true on Free, 107,804 centicredits consumed (1,078.04 credits), 1,000-credit allowance, unusedCenticredits=-7,804, autoPurchasingActivated=false. Reset: 20 November 2026 01:13:58 UTC. Main scenarios are configured active but platform-paused. Codex browser control has been restored and both latest native exports obtained. Fresh import verification and additional public-post authorization remain outstanding. The public repository is https://github.com/ezralazuardy/placidway . Important execution evidence is saved locally.
 
 | ID | Requirement | Verified evidence | Remaining acceptance |
 |---|---|---|---|
@@ -31,9 +31,9 @@ Accepted preview trace: `1 → 32 → 31 → 4 → 10 → 29 → 5 → 18 → 48
 
 ## Native export portability
 
-**Review fixes on 23 October changed both production graphs after these downloads. The files currently in workflows/ are historical native exports and require refresh before submission. The local readiness checker deliberately fails until the new editor exports contain the corrected guards and outcome modules.**
+**Latest native exports obtained 31 October 2026:** files in workflows/ now contain all 49 generator and 50 publisher modules and the final review fixes. These are native editor downloads, not reconstructed blueprints. Module types, parameters, mappings, data, routing and filters match the final live configurations. Reviewer addresses and connection labels are sanitized for publication. Local blueprint and sample checks pass.
 
-Native editor exports were downloaded after the final production edits. The sanitized Daily Draft file was imported into fresh inactive scenario `6728706`: 47 modules and routing were present with no reported module issues. The publisher import into `6728746` was **not completed**: live inspection still shows only its empty Start/Return template. Browser inventory on continuation returned no connected browser. Do not label publisher import verified.
+Historical portability evidence: an earlier 47-module Daily Draft export was imported into inactive scenario `6728706` with no reported module issues. That does not verify the latest 49-module export. Publisher import into `6728746` was not completed. Neither latest export has completed a fresh import-and-relink acceptance test; do not label that verification passed.
 
 The Daily Draft import is now an isolated QA workflow, not a production export: URL/day draft locks are namespaced; the human-approval consumer is disabled; auto mode calls the production publisher with `dry_run=true`, `publish_enabled=false`; Gmail recipients are restored to the owner only. Production native files retain their original behavior.
 
@@ -65,7 +65,7 @@ The parser was restored after fault injection. QA scenario 6728706 is inactive. 
 - Final corrected automatic path: parent `a71e63b020934024b5f5a27426ce729a` → child `507a09fc70864efd8d251cfdf076ea08`, dry_run_validated; child trace excludes URL/date reservation and Facebook modules. For this controlled test only, draft locks were namespaced, human approval consumption disabled, and auto caller forced to preview. All eight changed production module configurations were restored exactly, approval consumer re-enabled and schedule restored to 09:00; then the organization credit limit paused execution.
 - Text-only routing/error test: `81e4004d61c0479189c97e69f59f9a9c` in the no-Facebook clone reached replacement module13, handlers37/47 and Gmail26; this tests the no-image error path, not actual text-only Facebook publication.
 - Import instructions now include replacing account-specific literal links in email bodies.
-- Ten offline allowed/prohibited pattern cases (three allowed, seven blocked) exercise the actual exported prohibited-claim regex in Python against English text. These are pattern-only regression checks, not complete-format validation or additional live LLM results. Existing sample counts/hashes and the strict separator counts also pass local checks. Overall package readiness deliberately fails until native exports are refreshed.
+- Ten offline allowed/prohibited pattern cases (three allowed, seven blocked) exercise the actual exported prohibited-claim regex in Python against English text. These are pattern-only regression checks, not complete-format validation or additional live LLM results. Sample counts/hashes, strict separator counts, final native module guards, stored-payload preservation and sequential settings pass local checks following the 31 October native export refresh. Live acceptance remains incomplete as documented above.
 
 
 Additional isolated publisher scenario `6737619` reproduces the production graph with URL/day keys prefixed `qa:publisher-20261023:`, a separate seeded draft copy, and **both Facebook modules replaced by deliberately invalid JSON parsers**. No Facebook connection/module exists in this clone. These are test doubles, not actual Facebook errors.

@@ -1,0 +1,24 @@
+{
+  "exported_on": "2026-10-31",
+  "source": "Native Make editor Export blueprint in Codex in-app browser",
+  "verification": "Module types, parameters, mapper/data, routing and filters match final saved live configurations. Local contract and sample checks pass. Fresh import/run not verified.",
+  "redactions": "Reviewer email addresses replaced with reviewer@example.com; connection display labels sanitized. Reconnect account resources before use.",
+  "scenarios": [
+    {
+      "scenario_id": 6702908,
+      "last_edit": "2026-10-22T17:57:58.677Z",
+      "module_count": 49,
+      "file": "workflows/live-rss-daily.blueprint.json",
+      "sha256": "a6d2b41a672d8dabc94d2891122df14985c652be384d31a7fcef30737237a626",
+      "original_native_sha256": "3f0af84c9614bcc7e2b7d749d246b30e5f9aa19dcd04bb597f37c406ef67bd27"
+    },
+    {
+      "scenario_id": 6698907,
+      "last_edit": "2026-10-22T17:41:01.471Z",
+      "module_count": 50,
+      "file": "workflows/review-publish.blueprint.json",
+      "sha256": "bc19899150b8ddb57433e542b6a796fcd926cb82d7b78fde5588d3a288985ab7",
+      "original_native_sha256": "e527c91a75e44ff5d3be4a7e7f18c574c86436b75ccb10c5013fc4c2f6a6b3d0"
+    }
+  ]
+}

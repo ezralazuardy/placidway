@@ -1,0 +1,12 @@
+[
+  {"caption":"In this PlacidWay episode: hospital accreditation questions.","blocked_by_prohibited_pattern":false},
+  {"caption":"The episode discusses clinic credential checks and travel questions.","blocked_by_prohibited_pattern":false},
+  {"caption":"The episode discusses what cost questions to ask.","blocked_by_prohibited_pattern":false},
+  {"caption":"Guaranteed recovery for every patient.","blocked_by_prohibited_pattern":true},
+  {"caption":"A cure for your condition.","blocked_by_prohibited_pattern":true},
+  {"caption":"Risk-free treatment with no risk.","blocked_by_prohibited_pattern":true},
+  {"caption":"100% success is promised.","blocked_by_prohibited_pattern":true},
+  {"caption":"The safest and best clinic.","blocked_by_prohibited_pattern":true},
+  {"caption":"Only $1000 for this procedure.","blocked_by_prohibited_pattern":true},
+  {"caption":"Treatment for 1000 USD.","blocked_by_prohibited_pattern":true}
+]

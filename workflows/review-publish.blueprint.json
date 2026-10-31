@@ -8,7 +8,7 @@
       "metadata": {
         "designer": {
           "x": 0,
-          "y": 1050
+          "y": 1200
         }
       }
     },
@@ -32,7 +32,7 @@
       "metadata": {
         "designer": {
           "x": 300,
-          "y": 1050,
+          "y": 1200,
           "name": "Persist every publisher request"
         }
       }
@@ -51,7 +51,7 @@
       "metadata": {
         "designer": {
           "x": 600,
-          "y": 1050,
+          "y": 1200,
           "name": "Read immutable draft and decision from native review queue"
         }
       },
@@ -77,7 +77,7 @@
           "metadata": {
             "designer": {
               "x": 900,
-              "y": 2100,
+              "y": 2400,
               "name": "Persist invalid or missing stored draft"
             }
           }
@@ -89,7 +89,7 @@
           "metadata": {
             "designer": {
               "x": 1200,
-              "y": 2100,
+              "y": 2400,
               "name": "Stop invalid draft without publishing"
             }
           }
@@ -106,7 +106,7 @@
       "metadata": {
         "designer": {
           "x": 900,
-          "y": 900,
+          "y": 1050,
           "name": "Read reviewed draft"
         }
       },
@@ -132,7 +132,7 @@
           "metadata": {
             "designer": {
               "x": 1200,
-              "y": 1800,
+              "y": 2100,
               "name": "Persist invalid or missing stored draft"
             }
           }
@@ -144,7 +144,7 @@
           "metadata": {
             "designer": {
               "x": 1500,
-              "y": 1800,
+              "y": 2100,
               "name": "Stop invalid draft without publishing"
             }
           }
@@ -164,7 +164,7 @@
       "metadata": {
         "designer": {
           "x": 1200,
-          "y": 750,
+          "y": 900,
           "name": "Block URLs already published"
         }
       }
@@ -182,7 +182,7 @@
       "metadata": {
         "designer": {
           "x": 1500,
-          "y": 750,
+          "y": 900,
           "name": "Block a second published post on the same Jakarta date"
         }
       }
@@ -195,7 +195,7 @@
       "metadata": {
         "designer": {
           "x": 1800,
-          "y": 750,
+          "y": 900,
           "name": "Explicit validation pass or blocked audit"
         }
       },
@@ -241,7 +241,7 @@
                       "o": "boolean:equal"
                     },
                     {
-                      "a": "{{length(4.caption_without_link)}}",
+                      "a": "{{length(4.caption_without_link) + 1}}",
                       "b": 500,
                       "o": "number:less"
                     },
@@ -268,6 +268,21 @@
                     {
                       "a": "{{if(4.approval_required; \"approved\"; \"auto_ready\")}}",
                       "b": "{{31.status}}",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{31.caption}}",
+                      "b": "{{4.caption}}",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{31.title}}",
+                      "b": "{{4.title}}",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{31.source_url}}",
+                      "b": "{{4.url}}",
                       "o": "text:equal"
                     }
                   ]
@@ -1222,7 +1237,7 @@
                 "datastore": 178193
               },
               "filter": {
-                "name": "Any approval, integrity, URL or daily guard fails",
+                "name": "Any non-daily approval, integrity or URL gate fails",
                 "conditions": [
                   [
                     {
@@ -1268,7 +1283,7 @@
                   ],
                   [
                     {
-                      "a": "{{length(4.caption_without_link)}}",
+                      "a": "{{length(4.caption_without_link) + 1}}",
                       "b": 500,
                       "o": "number:greaterorequal"
                     }
@@ -1278,13 +1293,6 @@
                       "a": "{{4.status}}",
                       "b": "^(pending_review|ready_to_simulate|ready_to_publish)$",
                       "o": "text:notpattern"
-                    }
-                  ],
-                  [
-                    {
-                      "a": "{{if(1.dry_run; true; 29.exist = false)}}",
-                      "b": true,
-                      "o": "boolean:notequal"
                     }
                   ],
                   [
@@ -1305,6 +1313,27 @@
                     {
                       "a": "{{if(4.approval_required; \"approved\"; \"auto_ready\")}}",
                       "b": "{{31.status}}",
+                      "o": "text:notequal"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{31.caption}}",
+                      "b": "{{4.caption}}",
+                      "o": "text:notequal"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{31.title}}",
+                      "b": "{{4.title}}",
+                      "o": "text:notequal"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{31.source_url}}",
+                      "b": "{{4.url}}",
                       "o": "text:notequal"
                     }
                   ]
@@ -1335,6 +1364,65 @@
               }
             },
             {
+              "id": 49,
+              "module": "datastore:UpdateRecord",
+              "version": 1,
+              "parameters": {
+                "datastore": 178193
+              },
+              "mapper": {
+                "key": "{{1.draft_id}}",
+                "data": {
+                  "title": "{{31.title}}",
+                  "status": "{{if(31.status = \"approved\"; \"held_manual\"; 31.status)}}",
+                  "caption": "{{31.caption}}",
+                  "payload": "{{31.payload}}",
+                  "created_at": "{{31.created_at}}",
+                  "source_url": "{{31.source_url}}",
+                  "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+                  "source_mode": "{{31.source_mode}}",
+                  "caption_hash": "{{31.caption_hash}}",
+                  "execution_id": "{{31.execution_id}}",
+                  "error_message": "Approval, visible draft integrity, publish switch or URL gate did not pass; reconcile before reapproval.",
+                  "review_status": "{{31.review_status}}",
+                  "publish_status": "blocked",
+                  "facebook_post_id": "{{31.facebook_post_id}}"
+                },
+                "upsert": false,
+                "overwriteArrays": false
+              },
+              "metadata": {
+                "designer": {
+                  "x": 2400,
+                  "y": 1500,
+                  "name": "Remove permanently blocked approvals from eligible queue"
+                }
+              }
+            },
+            {
+              "id": 52,
+              "module": "google-email:sendAnEmail",
+              "version": 4,
+              "parameters": {
+                "__IMTCONN__": 11823690
+              },
+              "mapper": {
+                "to": [
+                  "reviewer@example.com"
+                ],
+                "content": "<h2>Draft blocked before Facebook</h2><p>Draft: {{1.draft_id}}</p><p>Source: {{4.url}}</p><p>Execution: {{executionId}}</p><p>Inspect the stored payload, visible caption/title/source, approval mode and URL history. A blocked approved draft is held_manual so it cannot stall later approvals. Reapprove only after reconciliation. No Facebook request was made by this blocked branch.</p>",
+                "subject": "[ACTION REQUIRED] PlacidWay approval held for reconciliation",
+                "bodyType": "rawHtml"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 2700,
+                  "y": 1500,
+                  "name": "Alert blocked approval and reconciliation action"
+                }
+              }
+            },
+            {
               "id": 45,
               "module": "scenario-service:ReturnData",
               "version": 2,
@@ -1344,9 +1432,157 @@
               },
               "metadata": {
                 "designer": {
-                  "x": 2400,
+                  "x": 3000,
                   "y": 1500,
                   "name": "Return explicit blocked outcome"
+                },
+                "expect": [
+                  {
+                    "name": "publication_json",
+                    "type": "text"
+                  },
+                  {
+                    "name": "status",
+                    "type": "text"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "flow": [
+            {
+              "id": 50,
+              "module": "datastore:AddRecord",
+              "version": 1,
+              "parameters": {
+                "datastore": 178193
+              },
+              "filter": {
+                "name": "Valid approved draft waits for a free Jakarta date",
+                "conditions": [
+                  [
+                    {
+                      "a": "{{4.guardrail_ok}}",
+                      "b": true,
+                      "o": "boolean:equal"
+                    },
+                    {
+                      "a": "{{4.url}}",
+                      "b": "^(https://www\\.placidway\\.com/article/[0-9]+/[A-Za-z0-9-]+|https://rss\\.com/podcasts/placidway-connect-pod1/[0-9]+/?)$",
+                      "o": "text:pattern"
+                    },
+                    {
+                      "a": "{{sha256(4.caption_without_link)}}",
+                      "b": "{{4.caption_hash}}",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{4.caption}}",
+                      "b": "{{4.caption_without_link}}\n{{4.url}}",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{if(1.dry_run; true; 1.publish_enabled)}}",
+                      "b": true,
+                      "o": "boolean:equal"
+                    },
+                    {
+                      "a": "{{10.exist}}",
+                      "b": false,
+                      "o": "boolean:equal"
+                    },
+                    {
+                      "a": "{{length(4.caption_without_link) + 1}}",
+                      "b": 500,
+                      "o": "number:less"
+                    },
+                    {
+                      "a": "{{4.status}}",
+                      "b": "^(pending_review|ready_to_simulate|ready_to_publish)$",
+                      "o": "text:pattern"
+                    },
+                    {
+                      "a": "{{31.status}}",
+                      "b": "^(approved|auto_ready)$",
+                      "o": "text:pattern"
+                    },
+                    {
+                      "a": "{{1.draft_id}}",
+                      "b": "draft:{{sha256(31.payload)}}",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{if(4.approval_required; \"approved\"; \"auto_ready\")}}",
+                      "b": "{{31.status}}",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{31.caption}}",
+                      "b": "{{4.caption}}",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{31.title}}",
+                      "b": "{{4.title}}",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{31.source_url}}",
+                      "b": "{{4.url}}",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{1.dry_run}}",
+                      "b": false,
+                      "o": "boolean:equal"
+                    },
+                    {
+                      "a": "{{29.exist}}",
+                      "b": true,
+                      "o": "boolean:equal"
+                    }
+                  ]
+                ]
+              },
+              "mapper": {
+                "key": "run:{{executionId}}:deferred-daily-limit",
+                "data": {
+                  "title": "{{4.title}}",
+                  "status": "deferred_daily_limit",
+                  "caption": "{{4.caption}}",
+                  "source_url": "{{4.url}}",
+                  "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
+                  "caption_hash": "{{4.caption_hash}}",
+                  "execution_id": "{{executionId}}",
+                  "error_message": "Valid draft remains approved for the next available Jakarta publication date.",
+                  "review_status": "{{31.status}}",
+                  "publish_status": "not_published"
+                },
+                "overwrite": false
+              },
+              "metadata": {
+                "designer": {
+                  "x": 2100,
+                  "y": 1800,
+                  "name": "Persist temporary daily-cap deferral without consuming approval"
+                }
+              }
+            },
+            {
+              "id": 51,
+              "module": "scenario-service:ReturnData",
+              "version": 2,
+              "mapper": {
+                "status": "deferred_daily_limit",
+                "publication_json": ""
+              },
+              "metadata": {
+                "designer": {
+                  "x": 2400,
+                  "y": 1800,
+                  "name": "Return temporary daily-limit deferral"
                 },
                 "expect": [
                   {

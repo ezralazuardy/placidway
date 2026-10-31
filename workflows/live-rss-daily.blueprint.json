@@ -707,7 +707,7 @@
                               "o": "text:equal"
                             },
                             {
-                              "a": "{{length(8.caption_without_link)}}",
+                              "a": "{{length(8.caption_without_link) + 1}}",
                               "b": 500,
                               "o": "number:less"
                             },
@@ -850,6 +850,10 @@
                           {
                             "name": "created_at",
                             "value": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}"
+                          },
+                          {
+                            "name": "character_count_before_link",
+                            "value": "{{length(8.caption_without_link) + 1}}"
                           }
                         ]
                       },
@@ -1188,7 +1192,7 @@
                           ],
                           [
                             {
-                              "a": "{{length(8.caption_without_link)}}",
+                              "a": "{{length(8.caption_without_link) + 1}}",
                               "b": 500,
                               "o": "number:greaterorequal"
                             }
@@ -1332,6 +1336,42 @@
         {
           "flow": [
             {
+              "id": 49,
+              "module": "datastore:ExistRecord",
+              "version": 1,
+              "parameters": {
+                "datastore": 178193
+              },
+              "mapper": {
+                "key": "draft-day:{{formatDate(now; \"YYYY-MM-DD\"; \"Asia/Jakarta\")}}"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 900,
+                  "y": 2700,
+                  "name": "Resolve final daily-draft outcome"
+                }
+              }
+            },
+            {
+              "id": 50,
+              "module": "datastore:ExistRecord",
+              "version": 1,
+              "parameters": {
+                "datastore": 178193
+              },
+              "mapper": {
+                "key": "run:{{executionId}}:error:2"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1200,
+                  "y": 2700,
+                  "name": "Resolve source failure before final outcome"
+                }
+              }
+            },
+            {
               "id": 26,
               "module": "datastore:AddRecord",
               "version": 1,
@@ -1341,18 +1381,26 @@
               "mapper": {
                 "key": "run:{{executionId}}:complete",
                 "data": {
-                  "status": "completed",
+                  "status": "{{if(50.exist; \"source_failed\"; if(15.exist; \"skipped_daily_draft_exists\"; if(49.exist; \"completed_draft_saved\"; \"no_eligible_content\")))}}",
                   "updated_at": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ssZ\"; \"UTC\")}}",
                   "execution_id": "{{executionId}}",
+                  "error_message": "{{if(50.exist; \"Source unavailable; see linked source error and retry state.\"; if(15.exist; \"Daily draft already reserved; source retrieval skipped.\"; if(49.exist; \"\"; \"No eligible candidate passed selection and guardrails; see rejection events when present.\")))}}",
                   "publish_status": "see_linked_draft_and_publication_events"
                 },
                 "overwrite": false
               },
               "metadata": {
                 "designer": {
-                  "x": 900,
+                  "x": 1500,
                   "y": 2700,
-                  "name": "Persist completed daily/manual execution even with no content"
+                  "name": "Persist completed daily/manual execution even with no content",
+                  "messages": [
+                    {
+                      "category": "reference",
+                      "severity": "error",
+                      "message": "'Data store - Add/replace a record' [module ID 26] references inaccessible module 'Data store - Check the existence of a record' [module ID 15]."
+                    }
+                  ]
                 }
               }
             }

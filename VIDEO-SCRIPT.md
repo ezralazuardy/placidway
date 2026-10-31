@@ -6,7 +6,7 @@ Use the saved execution evidence if the Make organization is paused. The workflo
 
 “This Make.com workflow turns publicly available PlacidWay podcast content into Facebook-ready posts. It has a daily draft generator and a separate review-and-publish scenario. The default mode requires human approval.”
 
-Show the two Make scenarios and the workflow files. The included native files are earlier exports; the live scenarios received later fixes. The publisher export has not been independently import-tested.
+Show the two Make scenarios and the workflow files. The included native files were exported on 31 October 2026 and match the latest saved live configurations: 49 generator and 50 publisher modules. Fresh import testing remains outstanding.
 
 ## 1:00–2:30 — Source and AI
 
@@ -26,4 +26,4 @@ Explain that the publisher reserves the source URL and Jakarta date before the e
 
 ## 7:30–8:30 — Setup and limitations
 
-Show README, test report, samples, and workflow files. Explain that the Make Free organization is paused until credits become available, the native exports predate the latest changes, final import and retry exhaustion remain unverified, and the source is an official podcast hosted outside the PlacidWay domain. A public source link is needed for the requested submission.
+Show README, test report, samples, and workflow files. Explain that the Make Free organization is paused until credits become available, final import and retry exhaustion remain unverified, and the source is an official podcast hosted outside the PlacidWay domain. Show the public source link: https://github.com/ezralazuardy/placidway .

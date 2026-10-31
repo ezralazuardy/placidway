@@ -1,6 +1,6 @@
 # Submission note
 
-This assessment package includes Make.com native blueprint exports from an earlier version, documentation, actual generated sample posts and saved execution evidence. The current live Make scenarios contain additional fixes made after those exports; re-export and import verification remain outstanding.
+This assessment package includes the latest saved Make.com native blueprints, documentation, actual generated sample posts and saved execution evidence. The blueprints were exported directly from the Make editor in the Codex browser on 31 October 2026. All 49 generator and 50 publisher modules, their configuration values, routing and filters were compared with the final saved live configurations. The exports include the latest approval, queue handling, caption-length and execution-outcome fixes. Fresh import verification remains outstanding.
 
 The current Make Free organization is paused after exhausting its credits. A historical image post was published to the candidate's own test Facebook Page on 20 October 2026. A later automatic path was verified in dry-run mode without posting. An explicit human-approval-to-publication test, retry exhaustion, and final-version Facebook publication remain unverified.
 

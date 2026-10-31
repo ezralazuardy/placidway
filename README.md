@@ -4,7 +4,7 @@ This Make.com demonstration retrieves publicly available PlacidWay-authored podc
 
 ## Package status
 
-This is an **as-is assessment submission**. The native Make exports in `workflows/` are genuine exports of an earlier configuration: the current live scenarios contain subsequent fixes. The publisher export has not been independently import-tested. The Make Free organization is paused because its credit allowance was exhausted; a new live run requires credits. See `SUBMISSION-NOTE.md` and `TESTING.md` for the distinction between verified behavior and outstanding tests.
+This is an **as-is assessment submission**. Both native Make blueprints in `workflows/` were exported directly through the Make editor in the Codex browser on 31 October 2026: 49 modules in Daily Draft and 50 in Review & Publish. Their module configurations, routing and filters match the latest saved live scenarios, including the final approval and logging fixes. Reviewer email addresses and connection labels are sanitized; reconnect resources on import. See `EXPORT-PROVENANCE.json` for version identifiers and checksums. Fresh import testing remains outstanding. The Make Free organization is paused because its credit allowance was exhausted; a new live run requires credits. See `SUBMISSION-NOTE.md` and `TESTING.md` for verified behavior and outstanding tests.
 
 ## Architecture
 
@@ -15,7 +15,7 @@ This is an **as-is assessment submission**. The native Make exports in `workflow
 
 ## Setup
 
-- Import `workflows/review-publish.blueprint.json`, then `workflows/live-rss-daily.blueprint.json` into inactive Make scenarios. Importing these older native exports does **not** recreate the subsequent live fixes. Review the scenario before activation.
+- Import `workflows/review-publish.blueprint.json`, then `workflows/live-rss-daily.blueprint.json` into inactive Make scenarios. These exports contain the latest saved fixes. Review the imported scenario and reconnect its resources before activation; fresh import acceptance has not been completed.
 - Connect Gemini, Gmail, and Facebook Pages. Use only a test Page you own. Replace placeholder reviewer addresses in every Gmail module, including error handlers.
 - Create a Data Store with the optional text fields in `DATA-STORE.md` and reconnect every Data Store module. Replace example store, scenario, page and connection identifiers with your own.
 - Update literal review-queue and execution-history links inside email bodies, and repoint both subscenario calls to the imported publisher.
